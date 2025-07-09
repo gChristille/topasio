@@ -1,13 +1,13 @@
-from src.generic_classes.space import Space
-from src.generic_classes.tree import Node
-from src.generic_classes.element import Element
+from topasio.generic_classes.space import Space
+from topasio.generic_classes.tree import Node
+from topasio.generic_classes.element import Element
 
-from src.printing import writeVal
+from topasio.printing import writeVal
 
 import quantities as q
 import os
 from pathlib import Path
-
+from topasio.config import cfg
 
 class Geometry(Space):
     def __init__(self):
@@ -19,12 +19,17 @@ class Geometry(Space):
         self["_modified"] = []
 
 
-    def dumpToFile(self, basename="autotopas", print_children=True):
+    def dumpToFile(self, basename="autotopas"):
+        for elemName in self["_modified"]:
+            if "Parent" not in self[elemName]["_modified"]:
+                self[elemName].Parent = "World"
+        
         self["_dirmap"], self["_filenamemap"] = self.getDirMap(self.getTree("World"), basename=basename)
         dirmap = self["_dirmap"]
         filenamemap = self["_filenamemap"]
 
-        for dirname, filename in zip(list(dirmap.values()) + [basename], list(filenamemap.values()) + ["main.in"]):
+
+        for dirname, filename in zip(list(dirmap.values()) + [basename], list(filenamemap.values()) + ["main.tps"]):
             # print(f"Creating file {os.path.join(dirname, filename)}")
             # Create dir recursively if it does not exist
             if not os.path.exists(dirname):
@@ -38,10 +43,9 @@ class Geometry(Space):
             if hasattr(self[elemName], "dumpToFile"):
                 self[elemName].dumpToFile(elemName=elemName, 
                                         space_name=self["_name"],
-                                        filename=self.getFilePath(elemName, basename=basename), 
-                                        print_children=print_children)
+                                        filename=self.getFilePath(elemName, basename=basename))
             else:
-                with open(f"{basename}/main.in", "a+") as f:
+                with open(f"{basename}/main.tps", "a+") as f:
                     writeVal(f, 
                              space_name=self["_name"], 
                              elemName=elemName, 
@@ -49,7 +53,7 @@ class Geometry(Space):
                              value=self[elemName])
 
         world_path = Path(self.getFilePath("World", basename=basename))
-        with open(world_path.parent.parent / "main.in", "a+") as f:
+        with open(world_path.parent.parent / "main.tps", "a+") as f:
             f.write(f"\n\nincludeFile = {basename}/geometry/{world_path.name}\n\n\n")
 
     def getFilePath(self, elemName: str, basename:str="autotopas") -> str:
@@ -61,7 +65,7 @@ class Geometry(Space):
             node = self["_tree"].find(elemName)
             return self["_dirmap"][node] + self["_filenamemap"][node]
         else:
-            return "main.in"
+            return "main.tps"
         
     def getTree(self, parent, tree=None):
         if tree is None:
@@ -86,7 +90,10 @@ class Geometry(Space):
                 return self.getChildrenOf(parent)
             print(f"Parent '{parent}' not found in self['_modified'].")
             return []
-        children = [child for child in self["_modified"] if isinstance(self[child], Element) and self[child].Parent == parent]
+        children = [child for child in self["_modified"] if isinstance(self[child], Element)]
+        if parent == "World":
+            children = [child for child in children if child != "World"]
+        children = [child for child in children if self[child]["Parent"] == parent]
         return children
     
     def getDirMap(self, tree: Node, basename:str="autotopas") -> dict[Node, str]:
@@ -101,24 +108,24 @@ class Geometry(Space):
             
             if node.name == "World":
                 dirmap[node] = baseDir
-                filenamemap[node] = "World.in"
+                filenamemap[node] = "World.tps"
 
                 for child in node.children:
                     if child.isLeaf():
                         dirmap[child] = baseDir
-                        filenamemap[child] = f"{child.name}.in"
+                        filenamemap[child] = f"{child.name}.tps"
 
                 continue
 
             if node.isParentOfChain():
-                file = f"{node.name}.in"
+                file = f"{node.name}.tps"
                 for child in node.iterate():
                     filenamemap[child] = file
                     dirmap[child] = node # means the dir of the parent. Will be replaced with the correct path later
                 continue
 
             if node.isgroup and not node.expand:
-                file = f"{node.name}.in"
+                file = f"{node.name}.tps"
                 filenamemap[node] = file
                 dirmap[node] = node
 
@@ -133,15 +140,15 @@ class Geometry(Space):
                     dirmap[node] = dirmap[node.parent]
                 else:
                     dirmap[node] = dirmap[node.parent] + node.parent.name + "/"
-                    filenamemap[node] = node.name + ".in"
+                    filenamemap[node] = node.name + ".tps"
                 continue
             
             if not node.isgroup and not node.isLeaf():
-                filenamemap[node] = node.name + ".in"
+                filenamemap[node] = node.name + ".tps"
                 dirmap[node] = dirmap[node.parent] + node.name + "/"
 
             if not node.isgroup and node.isLeaf():
-                filenamemap[node] = node.name + ".in"
+                filenamemap[node] = node.name + ".tps"
                 dirmap[node] = dirmap[node.parent]
 
             assert dirmap.keys() == filenamemap.keys(), "Directory map and filename map keys do not match."

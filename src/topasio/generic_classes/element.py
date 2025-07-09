@@ -1,5 +1,8 @@
 from copy import deepcopy
-from src.printing import writeVal
+from topasio.printing import writeVal
+from inspect import currentframe
+from pprint import pprint
+
 
 class Element(dict):
 
@@ -60,3 +63,27 @@ class Element(dict):
         for key in other:
             if key not in self["_modified"]:
                 self["_modified"].append(key)
+
+    def __enter__(self):
+        globas_before = currentframe().f_back.f_globals.copy()
+        self._globals_before = globas_before
+        return
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        globals_after = currentframe().f_back.f_globals.copy()
+        for key in globals_after:
+            if key not in self["_globals_before"]:
+                self[key] = globals_after[key]
+                if key not in self["_modified"]:
+                    self["_modified"].append(key)
+                print(f"Added global variable '{key}' to element, with value: {globals_after[key]}")
+        
+        for key in globals_after:
+            if key not in self["_globals_before"]:
+                del currentframe().f_back.f_globals[key]
+
+        del self["_globals_before"]
+        # remove _globals_before from _modified
+        if "_globals_before" in self["_modified"]:
+            self["_modified"].remove("_globals_before")
+    

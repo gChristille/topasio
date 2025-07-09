@@ -1,12 +1,13 @@
-from src.spaces.Ge import Ge
-from src.generic_classes.element import Element
+from topasio.spaces.Ge import Ge
+from topasio.generic_classes.element import Element
 from quantities import cm, deg, m
 from rich import print as rprint
 from rich.text import Text
 from rich.tree import Tree
-from src.printing import writeVal
+from topasio.printing import writeVal
 import os
 import quantities as q
+from topasio.config import cfg
 
 class GElement(Element):
     def __init__(self):
@@ -88,7 +89,7 @@ class GElement(Element):
                 leaf = tree.add(txt)
         rprint(tree)
 
-    def dumpToFile(self, elemName, space_name, filename, print_children=False):
+    def dumpToFile(self, elemName, space_name, filename):
         dirmap = Ge["_dirmap"]
         filenamemap = Ge["_filenamemap"]
         keys = sorted(self["_modified"], key=getOrder)
@@ -113,7 +114,7 @@ class GElement(Element):
                 child_filename = f"{dirmap[child]}{filenamemap[child]}"
                 if filename != child_filename:
                     f.write(f"includeFile = {child_filename}\n")
-            if print_children:
+            if cfg["geometry:print_children"]:
                 children = Ge.getChildrenOf(elemName)
                 if len(children) > 0:
                     f.write("# Children: [")

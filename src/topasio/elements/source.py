@@ -1,8 +1,8 @@
-from src.generic_classes.element import Element
+from topasio.generic_classes.element import Element
 from quantities import cm, deg, MeV, rad
-from src.geometry import Ge
-from src.spaces.So import So
-from src.printing import writeVal
+from topasio.elements.geometry import Ge
+from topasio.spaces.So import So
+from topasio.printing import writeVal
 
 class Source(Element):
     def __init__(self):

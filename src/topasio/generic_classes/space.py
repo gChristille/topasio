@@ -1,9 +1,9 @@
-from src.generic_classes.element import Element
+from topasio.generic_classes.element import Element
 import logging
 import pandas as pd
 import re
 import quantities as q
-from src.printing import writeVal
+from topasio.printing import writeVal
 
 class Space(Element):
     def __init__(self):
@@ -61,7 +61,7 @@ class Space(Element):
 
 
     def dumpToFile(self, basename="autotopas"):
-        filepath = f"{basename}/main.in"
+        filepath = f"{basename}/main.tps"
 
         for elemName in self["_modified"]:
             if hasattr(self[elemName], "dumpToFile"):

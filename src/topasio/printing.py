@@ -18,6 +18,11 @@ def writeVal(f, space_name, elemName, key, value):
 
         magnitude = value.magnitude
         unit = value.units
+        if isdimensionless(value):
+            value = float(value.magnitude)  # If the unit is dimensionless, just use the magnitude
+
+            typeID = getTypeID(value)  # Update typeID to unitless
+            
         if "**" in str(unit):
             # Handle cases like "m**2" or "m**3"
             unit = str(unit).replace("**", "") # unit is of the form 1.0 m2
@@ -32,10 +37,6 @@ def writeVal(f, space_name, elemName, key, value):
             
             value = f"{magnitude} {unit}"
             
-        if isdimensionless(value):
-            value = float(value.magnitude)  # If the unit is dimensionless, just use the magnitude
-
-            typeID = getTypeID(value)  # Update typeID to unitless
     
 
 

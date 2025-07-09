@@ -1,4 +1,4 @@
-from src.generic_classes.space import Space
+from topasio.generic_classes.space import Space
 import quantities as q
 
 def setMaDefaults(Ma):

@@ -1,6 +1,6 @@
-from src.geometry import Ge
-from src.source import So
-from src.scorer import Sc
+from topasio.geometry import Ge
+from topasio.source import So
+from topasio.scorer import Sc
 
 
 

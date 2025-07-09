@@ -1,5 +1,5 @@
-from src.generic_classes.space import Space
-from src.spaces.Ge import Ge
+from topasio.generic_classes.space import Space
+from topasio.spaces.Ge import Ge
 
 
 class TheScorers(Space):
@@ -18,6 +18,11 @@ class TheScorers(Space):
             self[elemName].dumpToFile(elemName, 
                                       space_name=self["_name"],
                                       filename=self.getFilePath(elemName, basename=basename))
+
+    def set_outputs_to(self, output_format: str):
+        for elemName in self["_modified"]:
+            if "OutputType" not in self[elemName]["_modified"]:
+                self[elemName].OutputType = output_format
 
 
 

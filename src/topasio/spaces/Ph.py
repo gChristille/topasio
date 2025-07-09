@@ -1,4 +1,4 @@
-from src.topasio import Space
+from topasio.topasio import Space
 import quantities as q
 
 Ph = Space()

@@ -1,7 +1,7 @@
-from src.generic_classes.space import Space
+from topasio.generic_classes.space import Space
 import quantities as q
-from src.spaces.Ge import Ge
-from src.printing import writeVal
+from topasio.spaces.Ge import Ge
+from topasio.printing import writeVal
 
 class TheSources(Space):
     def __init__(self):

@@ -1,4 +1,4 @@
-from src.generic_classes.space import Space
+from topasio.generic_classes.space import Space
 
 
 def setTsDefaults(Ts):

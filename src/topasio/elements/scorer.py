@@ -1,5 +1,5 @@
-from src.spaces.Sc import Sc
-from src.generic_classes.element import Element
+from topasio.spaces.Sc import Sc
+from topasio.generic_classes.element import Element
 
 
 class Scorer(Element):

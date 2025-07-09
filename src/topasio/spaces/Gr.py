@@ -1,4 +1,4 @@
-from src.generic_classes.space import Space
+from topasio.generic_classes.space import Space
 import re
 def setGrDefaults(Gr):
     Gr.Enable = True # Set False to avoid instantiating any part of Geant4 visualization system (useful for running on batch machines that lack the OpenGL graphics library)
@@ -67,7 +67,7 @@ class TheGraphics(Space):
     def dumpToFile(self, basename="autotopas", method="bool"):
         
         if method == "bool" and self["_enable"]:
-            with open(f"{basename}/main.in", "a+") as f:
+            with open(f"{basename}/main.tps", "a+") as f:
                 res = """
                         b:Gr/Main/Enable              = "True"
                         s:Gr/Main/Type                = "OpenGL"
@@ -78,6 +78,7 @@ class TheGraphics(Space):
                         b:Gr/Main/IncludeTrajectories = "True"
                         b:Gr/Main/IncludeStepPoints   = "True"
                         b:Gr/Main/IncludeAxes         = "False"
+                        i:Gr/ShowOnlyOutlineIfVoxelCountExceeds = 300
                         """
                 res = re.sub(r"[ ]+", " ", res)  # Remove extra whitespace
                 res = re.sub(r"\n\s*", "\n", res)
