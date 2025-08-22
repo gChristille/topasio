@@ -76,7 +76,6 @@ class Element(dict):
                 self[key] = globals_after[key]
                 if key not in self["_modified"]:
                     self["_modified"].append(key)
-                print(f"Added global variable '{key}' to element, with value: {globals_after[key]}")
         
         for key in globals_after:
             if key not in self["_globals_before"]:
