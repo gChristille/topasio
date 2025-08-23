@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-VERSION = '0.0.1'
+VERSION = '1.0.2'
 DESCRIPTION = 'Package to automate writing of (Open)TOPAS scripts, allowing for type inference and better access to parameters'
 
 
