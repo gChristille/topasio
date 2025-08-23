@@ -198,13 +198,15 @@ class VizComponent(TsBox):
         super().__init__()
         self.Type = "TsBox"
         self.Parent = "World"  # Default parent is World
-        self.Material = "Air"  # Default material is Air
+        # self.Material = "Air"  # Default material is Air
+        self.IsVisible = True
+        self.IsParallel = True  # Visualization components are parallel by default
         self.Color = "Red"  # Default color for visualization
         self.HLX = 10 * cm
         self.HLY = 10 * cm
         self.HLZ = 1 * q.nm
         self["_modified"] = ["Type", "Parent", "Material", "Color", 
-                             "HLX", "HLY", "HLZ"]
+                             "HLX", "HLY", "HLZ", "IsParallel", "IsVisible"]
 
 class G4Cons(GElement):
     def __init__(self):

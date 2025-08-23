@@ -65,8 +65,8 @@ class TheGraphics(Space):
         self["_enable"] = False
     
     def dumpToFile(self, basename="autotopas", method="bool"):
-        
-        if method == "bool" and self["_enable"]:
+
+        if self["_enable"]:
             with open(f"{basename}/main.tps", "a+") as f:
                 res = """
                         b:Gr/Main/Enable              = "True"

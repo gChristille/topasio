@@ -10,3 +10,6 @@ wheels/
 .venv
 
 topasio_old_versions/
+
+docs/_site/**
+docs/.jekyll-cache/**

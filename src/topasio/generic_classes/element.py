@@ -2,7 +2,9 @@ from copy import deepcopy
 from topasio.printing import writeVal
 from inspect import currentframe
 from pprint import pprint
+import logging
 
+logger = logging.getLogger("topasio")
 
 class Element(dict):
 
@@ -74,6 +76,7 @@ class Element(dict):
         for key in globals_after:
             if key not in self["_globals_before"]:
                 self[key] = globals_after[key]
+                logger.info(f"Automatically creating new Element '{key}'={globals_after[key]}")
                 if key not in self["_modified"]:
                     self["_modified"].append(key)
         

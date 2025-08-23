@@ -4,6 +4,11 @@ from topasio.elements.scorer import Sc
 from topasio.spaces.Ts import Ts
 from topasio.spaces.Gr import Gr
 from topasio.spaces.Ma import Ma
+from topasio.spaces.Ph import Ph
+from topasio.spaces.Tf import Tf
+from topasio.spaces.El import El
+from topasio.spaces.Vr import Vr
+from topasio.spaces.Is import Is
 
 from topasio.config import cfg
 from topasio.output_conversion.output_conversion import write_to_parquet
@@ -16,7 +21,7 @@ from pprint import pformat
 
 
 logger = logging.getLogger("topasio")
-spaces = [Ge, Gr, So, Sc, Ts, Ma] # Ge must be first since it adds header to all files it creates
+spaces = [Ge, Gr, So, Sc, Ts, Ma, Ph, Tf, El, Vr, Is] # Ge must be first since it adds header to all files it creates
 
 
 def dump_spaces():
