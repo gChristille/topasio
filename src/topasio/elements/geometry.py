@@ -205,7 +205,7 @@ class VizComponent(TsBox):
         self.HLX = 10 * cm
         self.HLY = 10 * cm
         self.HLZ = 1 * q.nm
-        self["_modified"] = ["Type", "Parent", "Material", "Color", 
+        self["_modified"] = ["Type", "Parent", "Color", 
                              "HLX", "HLY", "HLZ", "IsParallel", "IsVisible"]
 
 class G4Cons(GElement):

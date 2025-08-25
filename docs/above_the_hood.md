@@ -80,15 +80,16 @@ cfg[{parameter}] = {value}
 
 Here are the current TopasIO parameters:
 
-```json
-"output_dir": "autotopas"          # Directory to put outputs in, relative to cwd
-"overwrite_scorer_outputs": False  # Whether to set all scorers to 'overwrite' if file exists
-"output_format": "binary"          # Default output format for scorers
-"topas_path": None                 # Path to the TOPAS executable, if None it will search in PATH and .bashrc
-"suppress_topas_output": True,     # Whether to suppress TOPAS output in the console
-"geometry:print_children": True,   # Whether to print children in geometry dumps
-"write_parameter_summary": False,  # Also outputs an almost-json file that includes the parameters used for this sim
-```
+| Parameter Name | Default Value | Description
+|-------|--------|
+|  output_dir | "autotopas"           |  Directory to put outputs in, relative to cwd
+|  overwrite_scorer_outputs | False   |  Whether to set all scorers to 'overwrite' if file exists
+|  output_format | "binary"           |  Default output format for scorers
+|  topas_path | None                  |  Path to the TOPAS executable, if None it will search in PATH and .bashrc
+|  suppress_topas_output | True      |  Whether to suppress TOPAS output in the console
+|  geometry:print_children | True    |  Whether to print children in geometry dumps
+|  write_parameter_summary | False   |  Also outputs an almost-json file that includes the parameters used for this sim
+
 
 A couple of notes:
 - TopasIO supports Parquet as output: if you set `cfg["output_format"] = "parquet"`, TopasIO will have Topas output in binary and then use its Scorer awareness to convert all files to parquet. The originals won't be overwritten. From my tests, this works better than `topas2numpy` (which is a python module for converting scorer outputs to pandas) because it uses polars (which is faster than pandas) and it supports scorers binned in energy (while said module doesn't). `topas2numpy` is still needed for importing phase space files into python.
